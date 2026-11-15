@@ -50,7 +50,8 @@ nav.scrolled{background:rgba(7,6,13,.65);backdrop-filter:blur(14px);padding:14px
 .tag{display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border:1px solid var(--line);border-radius:999px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);background:rgba(18,15,34,.6);backdrop-filter:blur(6px)}
 .tag i{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan);animation:pulse 2s infinite}
 @keyframes pulse{50%{opacity:.3}}
-h1{font-family:Orbitron;font-weight:900;font-size:clamp(64px,15vw,220px);line-height:.9;letter-spacing:-.02em;margin:28px 0 12px;user-select:none}
+h1 .word{display:inline-block;white-space:nowrap}
+h1{font-family:Orbitron;font-weight:900;font-size:clamp(56px,13vw,200px);line-height:.9;letter-spacing:-.02em;margin:28px 0 12px;user-select:none}
 h1 .ch{display:inline-block;transform:translateY(110%) rotate(8deg);opacity:0;
   background:linear-gradient(120deg,#fff 10%,var(--violet) 45%,var(--cyan) 80%);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
   animation:rise 1.2s var(--ease) forwards, sheen 6s linear infinite;filter:drop-shadow(0 0 30px rgba(177,108,255,.35))}
@@ -316,13 +317,18 @@ const nav = $('#nav');
 addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 30), { passive: true });
 
 /* ---------- title letters ---------- */
-'J0L MODS'.split('').forEach((c, i) => {
-  const s = document.createElement('span');
-  s.className = 'ch' + (c === ' ' ? ' gap' : '');
-  s.textContent = c === ' ' ? ' ' : c;
-  s.style.animationDelay = `${0.08 * i}s, 0s`;
-  $('#title').appendChild(s);
-});
+{ let i = 0;
+  ['J0L', 'MODS'].forEach((w, wi) => {
+    const word = document.createElement('span'); word.className = 'word';
+    w.split('').forEach(c => {
+      const s = document.createElement('span'); s.className = 'ch'; s.textContent = c;
+      s.style.animationDelay = `${0.08 * i++}s, 0s`; word.appendChild(s);
+    });
+    $('#title').appendChild(word);
+    if (!wi) $('#title').appendChild(document.createTextNode(' '));
+    i++;
+  });
+}
 const words = ['Custom mods', 'Free downloads', 'Made to order', 'Smooth installs', 'Your ideas', 'Built with care'];
 $('#marq').innerHTML = [...words, ...words].map((w, i) => i % 2 ? `<b>✦</b><span>${w}</span>` : `<b>✦</b><span>${w}</span>`).join('');
 
